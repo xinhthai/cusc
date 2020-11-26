@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 public class UserEntity implements Serializable{
     @Id
     private String userId;
+
+    @Column(name = "userName")
     private String userName;
     private String password;
     private String fullName;
@@ -32,6 +36,7 @@ public class UserEntity implements Serializable{
             cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(name="user_role",
             joinColumns = @JoinColumn(name ="userId"),
-            inverseJoinColumns = @JoinColumn(name = "Id"))
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roles;
 }
+//API CRUD Spring boot

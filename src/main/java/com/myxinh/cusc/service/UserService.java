@@ -1,7 +1,7 @@
 package com.myxinh.cusc.service;
 
 import com.myxinh.cusc.models.UserEntity;
-import com.myxinh.cusc.repository.UserRepository;
+import com.myxinh.cusc.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,22 +12,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService{
 
     @Autowired
-    UserRepository userRepository;
+    UserEntityRepository userEntityRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<UserEntity> result = userRepository.findByName(userName);//check user by Name
-        if(result.isEmpty()) {
+        UserEntity user = userEntityRepository.findByName(userName);
+        if(user == null) {
             throw new UsernameNotFoundException("Ko tim thay My Xinh");
         }
-        UserEntity user = result.get();
+//        UserEntity user = result.get();
         // get All Roles of User then for each role -->add to SimpleGrantedAuthority
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
@@ -36,4 +35,12 @@ public class UserService implements UserDetailsService {
         //convert UserEntity -->UserDetails because Spring Security only know UserDetails
         return new User(user.getUserName(),user.getPassword(),user.isActive(),true,true,true,authorities);
     }
+//    public List<UserEntity> getUsers(){
+//        List<UserEntity> users=userRepository.getUsers();
+//        if(users.isEmpty()){
+//            throw new IllegalArgumentException("List users is empty");
+//        }
+//        return users;
+//    }
+
 }

@@ -19,5 +19,5 @@ public class Role {
     private String name;
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-    private List<UserEntity> userEntities;
+    private List<UserEntity> users;
 }

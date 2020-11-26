@@ -19,23 +19,24 @@ CREATE TABLE USER_ROLE(
     roleId INT,
     CONSTRAINT PK_USER_ROLE FOREIGN KEY (userId) REFERENCES USER(userId),
     CONSTRAINT PK_ROLE_USER FOREIGN KEY (roleId) REFERENCES ROLE(Id)
-)
+);
 <!-- create news -->
 CREATE TABLE CATEGORY(
     categoryId INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(15)
-
 )
 CREATE TABLE NEWS(
     newsId INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30),
-    link VARCHAR(30),
-    content TEXT,
-    categoryId,
-    CONSTRAINT PK_NEWS FOREIGN KEY (categoryId) REFERENCES NEWS(categoryId)
-)
+    title NVARCHAR(150),
+    description NVARCHAR(300),
+    detail BLOB,
+    imagePath VARCHAR(45),
+    categoryId INT,
+    CONSTRAINT PK_NEWS FOREIGN KEY (categoryId) REFERENCES CATEGORY(categoryId)
+);
 CREATE TABLE IMAGE(
     imageId INT AUTO_INCREMENT PRIMARY KEY,
-    newsId,
+    imagePath VARCHAR(45),
+    newsId int,
     CONSTRAINT PK_IMAGE FOREIGN KEY (newsId) REFERENCES NEWS(newsId)
-)
+);
