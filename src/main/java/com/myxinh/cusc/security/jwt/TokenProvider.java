@@ -23,9 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class TokenProvider {//create jwt token
 
-    @Autowired
-    private UserService userService;
-
     @Value("${secretKey}")
     private String secretKey;
 

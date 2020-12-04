@@ -1,42 +1,45 @@
 CREATE TABLE USER(
-    userId CHAR(37) PRIMARY KEY,
-    userName VARCHAR(30),
-    password VARCHAR(30),
-    fullName NVARCHAR(150),
-    sex CHAR(5) DEFAULT 'MALE',
-    createdDate CHAR(17),
-    lastModifiedDate CHAR(17),
-    active BIT DEFAULT TRUE
+    `user_id` CHAR(37) PRIMARY KEY,
+    `username` VARCHAR(30),
+    `password` CHAR(60),
+    `full_name` NVARCHAR(50),
+    `sex` CHAR(5) DEFAULT 'MALE',
+    `created_date` DATETIME,
+    `last_modified_date` DATETIME,
+    `active` BIT DEFAULT TRUE
 );
 CREATE TABLE ROLE(
-    Id INT AUTO_INCREMENT PRIMARY KEY ,
-    name VARCHAR(15)
+    `role_id` INT AUTO_INCREMENT PRIMARY KEY ,
+    `name` VARCHAR(15)
 );
 
 CREATE TABLE USER_ROLE(
-    Id INT AUTO_INCREMENT PRIMARY KEY ,
-    userId CHAR(37),
-    roleId INT,
-    CONSTRAINT PK_USER_ROLE FOREIGN KEY (userId) REFERENCES USER(userId),
-    CONSTRAINT PK_ROLE_USER FOREIGN KEY (roleId) REFERENCES ROLE(Id)
+    `id` INT AUTO_INCREMENT PRIMARY KEY ,
+    `user_id` CHAR(37),
+    `role_id` INT,
+    CONSTRAINT PK_USER_ROLE FOREIGN KEY (user_id) REFERENCES USER(user_id),
+    CONSTRAINT PK_ROLE_USER FOREIGN KEY (role_id) REFERENCES ROLE(role_id)
 );
-<!-- create news -->
+
 CREATE TABLE CATEGORY(
-    categoryId INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(15)
-)
-CREATE TABLE NEWS(
-    newsId INT AUTO_INCREMENT PRIMARY KEY,
-    title NVARCHAR(150),
-    description NVARCHAR(300),
-    detail BLOB,
-    imagePath VARCHAR(45),
-    categoryId INT,
-    CONSTRAINT PK_NEWS FOREIGN KEY (categoryId) REFERENCES CATEGORY(categoryId)
+   `category_id` TINYINT AUTO_INCREMENT PRIMARY KEY,
+   `name` VARCHAR(15)
 );
-CREATE TABLE IMAGE(
-    imageId INT AUTO_INCREMENT PRIMARY KEY,
-    imagePath VARCHAR(45),
-    newsId int,
-    CONSTRAINT PK_IMAGE FOREIGN KEY (newsId) REFERENCES NEWS(newsId)
+
+CREATE TABLE MENU(
+   `menu_id` INT AUTO_INCREMENT PRIMARY KEY ,
+   `name` VARCHAR(30),
+   `parent_id` INT DEFAULT 0
+);
+
+CREATE TABLE NEWS(
+    `news_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `title` NVARCHAR(150),
+    `description` NVARCHAR(300),
+    `detail` BLOB,
+    `image_path` VARCHAR(20),
+    `menu_id` INT,
+    `category_id` TINYINT,
+    CONSTRAINT pk_category FOREIGN KEY (category_id) REFERENCES CATEGORY(category_id),
+    CONSTRAINT pk_menu FOREIGN KEY (menu_id) REFERENCES MENU(menu_id)
 );

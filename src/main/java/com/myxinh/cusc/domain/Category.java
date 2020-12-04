@@ -1,4 +1,4 @@
-package com.myxinh.cusc.models;
+package com.myxinh.cusc.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,18 +6,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
+@Table(name = "category")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+public class Category implements Serializable {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    @Column(name = "category_id")
+    private int categoryId;
+
+    @Column(name = "name",length = 15,nullable = false)
     private String name;
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE,CascadeType.REFRESH})
-    private List<UserEntity> users;
+
 }

@@ -1,6 +1,6 @@
 package com.myxinh.cusc.service;
 
-import com.myxinh.cusc.models.UserEntity;
+import com.myxinh.cusc.domain.UserEntity;
 import com.myxinh.cusc.repository.UserRepository;
 import com.myxinh.cusc.security.UserNotActivatedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String username)  {
-        return userRepository.findOneWithAuthoritiesByuserName(username)
+        return userRepository.findOneWithAuthoritiesByUsername(username)
                 .map(userEntity -> createSpringSecurityUser(username,userEntity))
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " was not found in the database"));
     }
@@ -41,7 +41,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toList());
-        return new User(user.getUserName(), user.getPassword(), grantedAuthorities);
+        return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 
 

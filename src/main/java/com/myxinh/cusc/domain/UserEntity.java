@@ -1,15 +1,14 @@
-package com.myxinh.cusc.models;
+package com.myxinh.cusc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -19,16 +18,24 @@ import java.util.List;
 @AllArgsConstructor
 public class UserEntity implements Serializable{
     @Id
+    @Column(name = "user_id",length = 37)
     private String userId;
 
-    @Column(name = "userName")
-    private String userName;
+    @Column(name = "username",length = 30,nullable = false)
+    private String username;
+
+    @Column(name = "password",length = 60,nullable = false)
     private String password;
+
+    @Column(name = "full_name",length = 50,nullable = false)
     private String fullName;
+
     private String sex;
+
+    @Column(name = "created_date")
     private String createdDate;
 
-    @Column(name = "lastModifiedDate")
+    @Column(name = "last_modified_date")
     private String lastModifiedDate;
 
     private boolean active;
@@ -36,9 +43,9 @@ public class UserEntity implements Serializable{
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(name="user_role",
-            joinColumns = @JoinColumn(name ="userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+            joinColumns = @JoinColumn(name ="user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
-    private List<Role> roles;
+    private Set<Role> roles;
 }
 //API CRUD Spring boot

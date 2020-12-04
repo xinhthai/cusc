@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AuthRequest {
-    private String userName;
-    private String password;
-
+public class ErrorResponse {
+    private int code;
+    private String message;
+    private String path;
 }

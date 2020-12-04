@@ -1,6 +1,6 @@
 package com.myxinh.cusc.repository;
 
-import com.myxinh.cusc.models.UserEntity;
+import com.myxinh.cusc.domain.UserEntity;
 import org.junit.Test;
 
 import java.util.List;
