@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Blob;
+import java.util.Set;
 
 @Entity
 @Table(name = "news")
@@ -26,6 +28,20 @@ public class News implements Serializable {
     @Column(name = "description",length = 300,nullable = false)
     private String description;
 
-//    @Column(name = "detail");
-//    private String
+    @Lob
+    @Column(name = "detail",length = Integer.MAX_VALUE, nullable = false)
+    private Blob detail;
+
+    @Column(name = "image_path",length = 20)
+    private String imagePath;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "menu_id",nullable = false)
+    private Menu menu;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id",nullable = false)
+    private Category category;
+
+
 }

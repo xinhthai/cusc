@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "menu")
@@ -25,5 +26,9 @@ public class Menu implements Serializable {
 
     @Column(name = "parent_id")
     private int parentId;
+
+    @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    private Set<News> news;
+
 
 }

@@ -18,6 +18,7 @@
         <java.version>11</java.version>
         <lombok.version>1.18.12</lombok.version>
         <jwttoken.version>0.9.1</jwttoken.version>
+        <model.mapper.version>2.3.8</model.mapper.version>
     </properties>
     <dependencies>
         <!-- spring data jpa-->
@@ -31,22 +32,26 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <!-- spring web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <!-- spring core-->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-core</artifactId>
         </dependency>
+
         <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <!-- hibernate-validator -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -74,6 +79,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- modelmapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${model.mapper.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
