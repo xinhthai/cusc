@@ -24,4 +24,10 @@ public class Role {
     @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     private Set<UserEntity> users;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="role_permission",
+            joinColumns = @JoinColumn(name ="role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions;
 }

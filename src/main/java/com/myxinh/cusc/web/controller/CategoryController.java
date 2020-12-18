@@ -22,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryRepository.findAll());
     }
 
-    @PostMapping("/categories")//add new User
+    @PostMapping("/categories")//add new Category
     public ResponseEntity<Category> saveCategory(@RequestBody Category category) throws URISyntaxException {
         if (category.getCategoryId() != 0){
             throw new BadRequestAlertException(String.valueOf(category.getCategoryId()));
@@ -50,7 +51,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/categories")// update User existing in database
+    @PutMapping("/categories")// update Category existing in database
     public ResponseEntity<Category> updateCategory(@Valid @RequestBody Category category) throws URISyntaxException {
         Optional<Category> existingCategory = categoryRepository.findOneByCategoryName(category.getCategoryName());
         if (existingCategory.isPresent() && !(existingCategory.get().getCategoryId() == category.getCategoryId())){
@@ -67,7 +68,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/categories/{categoryId}")//Delete User existing in database
+    @DeleteMapping("/categories/{categoryId}")//Delete Category existing in database
     public ResponseEntity<Void> deleteCategory(@PathVariable int categoryId) throws URISyntaxException {
         categoryService.deleteCategory(categoryId);
         HttpHeaders headers = new HttpHeaders();

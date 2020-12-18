@@ -47,5 +47,9 @@ public class UserEntity implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    private Set<News> news;
 }
 //API CRUD Spring boot

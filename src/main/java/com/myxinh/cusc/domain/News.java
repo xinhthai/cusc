@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -25,23 +26,28 @@ public class News implements Serializable {
     @Column(name = "title",length = 150,nullable = false)
     private String title;
 
-    @Column(name = "description",length = 300,nullable = false)
-    private String description;
+    @Column(name = "detail", nullable = false)
+    private String detail;
 
-    @Lob
-    @Column(name = "detail",length = Integer.MAX_VALUE, nullable = false)
-    private Blob detail;
-
-    @Column(name = "image_path",length = 20)
+    @Column(name = "image_path",length = (100))
     private String imagePath;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "menu_id",nullable = false)
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    @Column(name = "main_news")
+    private boolean mainNews;
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id",nullable = false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 }

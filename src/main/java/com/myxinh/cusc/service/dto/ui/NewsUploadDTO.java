@@ -12,15 +12,14 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsDTO {
-    private int newsId;
+public class NewsUploadDTO {
+    private String newsId;
     private String title;
     private String detail;
     private Date createdDate;
-    private int menuId;
-    private int categoryId;
+    private String menuId;
+    private String categoryId;
     private String userId;
-    private boolean mainNews;
+    private String mainNews;
     private MultipartFile imagePath;
-
 }

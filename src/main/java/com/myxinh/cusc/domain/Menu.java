@@ -1,5 +1,6 @@
 package com.myxinh.cusc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Menu implements Serializable {
     private int parentId;
 
     @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<News> news;
 
 
