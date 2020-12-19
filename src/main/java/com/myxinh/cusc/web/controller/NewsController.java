@@ -2,8 +2,8 @@ package com.myxinh.cusc.web.controller;
 
 import com.myxinh.cusc.domain.News;
 import com.myxinh.cusc.service.NewsService;
-import com.myxinh.cusc.service.dto.ui.NewsDTO;
 import com.myxinh.cusc.service.dto.ui.NewsUploadDTO;
+import com.myxinh.cusc.service.dto.ui.ViewNewsDTO;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import com.myxinh.cusc.web.errors.BadRequestAlertException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -43,8 +39,8 @@ public class NewsController {
     }
 
     @GetMapping("/news/titles")
-    public ResponseEntity<List<News>> getAllNewsByTitle(){
-        List<News> a = newsService.getAllNewsTitleAndId();
+    public ResponseEntity<List<ViewNewsDTO>> getAllNewsByTitle(){
         return ResponseEntity.ok(newsService.getAllNewsTitleAndId());
     }
+
 }

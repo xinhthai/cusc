@@ -1,12 +1,11 @@
 package com.myxinh.cusc.service;
 
 import com.myxinh.cusc.domain.Category;
-import com.myxinh.cusc.domain.Menu;
 import com.myxinh.cusc.domain.News;
 import com.myxinh.cusc.repository.MenuRepository;
 import com.myxinh.cusc.repository.NewsRepository;
-import com.myxinh.cusc.service.dto.ui.NewsDTO;
 import com.myxinh.cusc.service.dto.ui.NewsUploadDTO;
+import com.myxinh.cusc.service.dto.ui.ViewNewsDTO;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -50,9 +48,9 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    public List<News> getAllNewsTitleAndId(){
+    public List<ViewNewsDTO> getAllNewsTitleAndId(){
+        return newsRepository.getNewsIdAndTitle();
 
-       return newsRepository.getAllTitleAndId();
     }
 
     public Optional<News> findById(int id){

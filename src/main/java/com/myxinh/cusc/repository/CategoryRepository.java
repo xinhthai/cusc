@@ -12,3 +12,4 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     @Query("SELECT c FROM Category c WHERE c.categoryName = :categoryName")
     Optional<Category> findOneByCategoryName(@Param("categoryName") String categoryName);
 }
+
