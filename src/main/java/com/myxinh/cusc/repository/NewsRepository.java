@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, Integer> {
 
-    @Query("SELECT NEW com.myxinh.cusc.service.dto.ui.NewsViewDTO(n.newsId,n.title,n.shortContent,n.imagePath) FROM News n")
+    @Query("SELECT NEW com.myxinh.cusc.service.dto.ui.NewsViewDTO(" +
+            "n.newsId,n.title,n.shortContent,n.imagePath,n.category.categoryName,n.status)" +
+            " FROM News n")
     List<NewsViewDTO> getNewsIdAndTitle();
 
 }
