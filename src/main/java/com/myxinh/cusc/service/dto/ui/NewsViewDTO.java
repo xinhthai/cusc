@@ -13,4 +13,5 @@ public class NewsViewDTO {
     private int newsId;
     private String title;
     private String shortContent;
+    private String imagePath;
 }
