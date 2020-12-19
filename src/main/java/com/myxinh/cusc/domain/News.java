@@ -23,13 +23,17 @@ public class News implements Serializable {
     @Column(name = "news_id")
     private int newsId;
 
-    @Column(name = "title",length = 150,nullable = false)
+    @Column(name = "title",length = 50,nullable = false)
     private String title;
+
+    @Column(name = "short_content",length = 150,nullable = false)
+    private String shortContent;
+
 
     @Column(name = "detail", nullable = false)
     private String detail;
 
-    @Column(name = "image_path",length = (100))
+    @Column(name = "image_path")
     private String imagePath;
 
     @Column(name = "created_date")

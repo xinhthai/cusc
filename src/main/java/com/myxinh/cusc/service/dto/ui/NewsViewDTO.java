@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ViewNewsDTO {
+public class NewsViewDTO {
     private int newsId;
     private String title;
+    private String shortContent;
 }
