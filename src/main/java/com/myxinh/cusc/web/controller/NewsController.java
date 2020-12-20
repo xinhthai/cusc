@@ -99,4 +99,17 @@ public class NewsController {
         return ResponseEntity.noContent().headers(headers).build();
     }
 
+    @PutMapping("/news/{newsId}")
+    public ResponseEntity<String> updateNewsStatus(
+            @PathVariable("newsId")  int newsId,
+            @RequestParam("status") String status
+    ){
+        Optional<News> newsFind = newsService.findById(newsId);
+        if (newsFind.isPresent()){
+            return ResponseEntity.ok(newsRepository.updateNewStatus(newsId,status));
+        }else {
+            throw new NotFoundException("News "+ ErrorConstants.NOT_FOUND);
+        }
+    }
+
 }

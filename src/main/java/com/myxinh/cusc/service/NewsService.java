@@ -70,6 +70,8 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
                 .map(oldNews -> convert(news,NewsDTO.class));
     }
 
+
+
     public void deleteNews(int categoryId){
         newsRepository.findById(categoryId).ifPresent(
                 category -> {newsRepository.delete(category);}

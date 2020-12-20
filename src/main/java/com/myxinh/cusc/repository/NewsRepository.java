@@ -3,6 +3,7 @@ package com.myxinh.cusc.repository;
 import com.myxinh.cusc.domain.News;
 import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -21,6 +22,9 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
             "FROM News n WHERE n.category.categoryId =:categoryId OR n.menu.menuId =:menuId")
     List<NewsViewDTO> findNewsByCategoryIdOrMenuId(@Param("categoryId") int categoryId,@Param("menuId") int menuId);
 
+    @Modifying
+    @Query("UPDATE News n SET n.status =:status WHERE n.newsId =: newsId")
+    String updateNewStatus(int newsId,String status);
 }
 
 
