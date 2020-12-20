@@ -1,7 +1,9 @@
 package com.myxinh.cusc.service;
 
+import antlr.collections.List;
 import com.myxinh.cusc.domain.Category;
 import com.myxinh.cusc.repository.CategoryRepository;
+import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,4 +31,5 @@ public class CategoryService {
                 category -> {categoryRepository.delete(category);}
         );
     }
+
 }

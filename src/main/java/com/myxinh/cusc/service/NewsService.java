@@ -50,12 +50,16 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
         return newsRepository.save(news);
     }
 
-    public List<NewsViewDTO> getAllNewsTitleAndId(){
-        return newsRepository.getNewsIdAndTitle();
+    public List<NewsViewDTO> getAllNewsView(){
+        return newsRepository.findAllNewsView();
     }
 
     public Optional<News> findById(int id){
         return newsRepository.findById(id);
+    }
+
+    public List<NewsViewDTO> getNewsByCategoryIdOrMenuId(int categoryId,int menuId){
+        return newsRepository.findNewsByCategoryIdOrMenuId(categoryId,menuId);
     }
 
     public Optional<Object> updateNews(News news){

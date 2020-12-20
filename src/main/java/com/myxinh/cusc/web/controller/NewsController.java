@@ -33,7 +33,7 @@ public class NewsController {
 
     @GetMapping("/news/view")// Get View of News
     public ResponseEntity<List<NewsViewDTO>> getAllNewsByTitle(){
-        return ResponseEntity.ok(newsService.getAllNewsTitleAndId());
+        return ResponseEntity.ok(newsService.getAllNewsView());
     }
 
     @GetMapping("/news/{newsId}")// Get News Detail
@@ -44,6 +44,20 @@ public class NewsController {
         }else {
             throw new NotFoundException("News "+ ErrorConstants.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/news/type") ResponseEntity<List<NewsViewDTO>> findAllByCondition(
+            @RequestParam(value = "categoryId",defaultValue = "") String categoryId,
+            @RequestParam(value = "menuId",defaultValue = "0") String menuId){
+        int categoryIdInput = 0;
+        int menuIdInput =0;
+        if (!categoryId.equals("")){
+            categoryIdInput = Integer.parseInt(categoryId);
+        }
+        else if (!menuId.equals("")){
+            menuIdInput = Integer.parseInt((menuId));
+        }
+        return ResponseEntity.ok(newsService.getNewsByCategoryIdOrMenuId(categoryIdInput,menuIdInput));
     }
 
     @PostMapping("/news")//Add new News
@@ -75,6 +89,7 @@ public class NewsController {
             return ResponseEntity.noContent().headers(headers).build();
         }
     }
+
 
     @DeleteMapping("/news/{newsId}")//Delete Category existing in database
     public ResponseEntity<Void> deleteCategory(@PathVariable ("newsId") int newsId) throws URISyntaxException {

@@ -45,7 +45,7 @@ public class News implements Serializable {
     @Column(name = "status")
     private boolean status;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
