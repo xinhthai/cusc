@@ -15,6 +15,7 @@ import java.util.Date;
 public class NewsUploadDTO {
     private String newsId;
     private String title;
+    private String shortContent;
     private String detail;
     private Date createdDate;
     private String menuId;

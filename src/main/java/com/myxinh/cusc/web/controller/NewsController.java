@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NewsController {
 
     @Autowired
@@ -99,17 +100,15 @@ public class NewsController {
         return ResponseEntity.noContent().headers(headers).build();
     }
 
-    @PutMapping("/news/{newsId}")
-    public ResponseEntity<String> updateNewsStatus(
+    @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
+    public ResponseEntity<Void> updateNewsStatus(
             @PathVariable("newsId")  int newsId,
             @RequestParam("status") String status
-    ){
-        Optional<News> newsFind = newsService.findById(newsId);
-        if (newsFind.isPresent()){
-            return ResponseEntity.ok(newsRepository.updateNewStatus(newsId,status));
-        }else {
-            throw new NotFoundException("News "+ ErrorConstants.NOT_FOUND);
-        }
+    ) throws URISyntaxException {
+        newsService.updateNewsStatus(newsId,Boolean.parseBoolean(status));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsId+"status?"+status));
+        return ResponseEntity.noContent().headers(headers).build();
     }
 
 }

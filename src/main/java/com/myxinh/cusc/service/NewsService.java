@@ -37,6 +37,7 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
         News news = new News();
         news.setNewsId(0);
         news.setTitle(newsUploadDTO.getTitle());
+        news.setShortContent(newsUploadDTO.getShortContent());
         news.setDetail(newsUploadDTO.getDetail());
         news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
         news.setMainNews(Boolean.parseBoolean(newsUploadDTO.getMainNews()));
@@ -70,11 +71,16 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
                 .map(oldNews -> convert(news,NewsDTO.class));
     }
 
+    public void deleteNews(int newsId){
+        newsRepository.findById(newsId).ifPresent(
+                news -> {newsRepository.delete(news);}
+        );
+    }
 
+    public void updateNewsStatus(int newsId,boolean status){
 
-    public void deleteNews(int categoryId){
-        newsRepository.findById(categoryId).ifPresent(
-                category -> {newsRepository.delete(category);}
+        newsRepository.findById(newsId).ifPresent(
+                news -> {newsRepository.updateNewStatus(status,newsId);}
         );
     }
 
