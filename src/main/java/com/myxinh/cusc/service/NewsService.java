@@ -14,6 +14,11 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,12 +39,15 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        
         News news = new News();
         news.setNewsId(0);
         news.setTitle(newsUploadDTO.getTitle());
         news.setShortContent(newsUploadDTO.getShortContent());
         news.setDetail(newsUploadDTO.getDetail());
         news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
+        news.setCreatedDate(timestamp);
         news.setMainNews(Boolean.parseBoolean(newsUploadDTO.getMainNews()));
         news.setCategory(new Category(Integer.parseInt(newsUploadDTO.getCategoryId()),""));
         news.setMenu(

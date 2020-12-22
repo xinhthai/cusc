@@ -16,5 +16,6 @@ public class NewsViewDTO {
     private String shortContent;
     private String imagePath;
     private String categoryName;
+    private boolean mainNews;
     private boolean status;
 }
