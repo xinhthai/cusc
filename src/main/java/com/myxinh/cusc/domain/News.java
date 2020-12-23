@@ -28,11 +28,10 @@ public class News implements Serializable {
     @Column(name = "short_content",length = 150,nullable = false)
     private String shortContent;
 
-
     @Column(name = "detail", nullable = false)
     private String detail;
 
-    @Column(name = "image_path")
+    @Column(name = "image_path",nullable = false,length = 60)
     private String imagePath;
 
     @Column(name = "created_date")
