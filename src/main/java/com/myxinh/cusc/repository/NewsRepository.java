@@ -14,12 +14,12 @@ import java.util.List;
 public interface NewsRepository extends JpaRepository<News, Integer> {
 
     @Query("SELECT NEW com.myxinh.cusc.service.dto.ui.NewsViewDTO(" +
-            "n.newsId,n.title,n.shortContent,n.imagePath,n.category.categoryName,n.status)" +
+            "n.newsId,n.title,n.shortContent,n.imagePath,n.category.categoryName,n.status, n.mainNews)" +
             " FROM News n")
     List<NewsViewDTO> findAllNewsView();
 
     @Query("SELECT NEW com.myxinh.cusc.service.dto.ui.NewsViewDTO(" +
-            "n.newsId,n.title,n.shortContent,n.imagePath,n.category.categoryName,n.status)" +
+            "n.newsId,n.title,n.shortContent,n.imagePath,n.category.categoryName,n.status,n.mainNews)" +
             "FROM News n WHERE n.category.categoryId =:categoryId OR n.menu.menuId =:menuId")
     List<NewsViewDTO> findNewsByCategoryIdOrMenuId(@Param("categoryId") int categoryId,@Param("menuId") int menuId);
 

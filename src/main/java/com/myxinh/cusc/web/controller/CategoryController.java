@@ -5,7 +5,9 @@ import com.myxinh.cusc.repository.CategoryRepository;
 import com.myxinh.cusc.service.CategoryService;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import com.myxinh.cusc.web.errors.BadRequestAlertException;
+import com.myxinh.cusc.web.errors.ErrorConstants;
 import com.myxinh.cusc.web.errors.IsAlreadyException;
+import com.myxinh.cusc.web.errors.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,17 @@ public class CategoryController {
         return ResponseEntity.ok(categoryRepository.findAll());
     }
 
+    @GetMapping("/categories/{categoryId}")//get oneNameByCategoryId
+    public ResponseEntity<Category> getOneCategoryName(@PathVariable("categoryId") int categoryId){
+        Optional<Category> categoryFind= categoryService.findById(categoryId);
+        if(categoryFind.isPresent()){
+            return  ResponseEntity.ok(categoryFind.get());
+        }else{
+            throw new NotFoundException("Category "+ ErrorConstants.NOT_FOUND);
+        }
+    }
     @PostMapping("/categories")//add new Category
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Category> saveCategory(@RequestBody Category category) throws URISyntaxException {
         if (category.getCategoryId() != 0){
             throw new BadRequestAlertException(String.valueOf(category.getCategoryId()));

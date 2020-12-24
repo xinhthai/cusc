@@ -101,6 +101,7 @@ public class NewsController {
     }
 
     @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Void> updateNewsStatus(
             @PathVariable("newsId")  int newsId,
             @RequestParam("status") String status
