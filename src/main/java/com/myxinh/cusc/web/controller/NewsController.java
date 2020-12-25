@@ -12,10 +12,11 @@ import com.myxinh.cusc.web.errors.IsAlreadyException;
 import com.myxinh.cusc.web.errors.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -38,7 +39,7 @@ public class NewsController {
     }
 
     @GetMapping("/news/{newsId}")// Get News Detail
-    public ResponseEntity<News> getNewsById(@PathVariable("newsId") int newsId){
+    public ResponseEntity<News> getNewsById(@PathVariable("newsId") int newsId) throws IOException {
         Optional<News> newsFind = newsService.findById(newsId);
         if (newsFind.isPresent()){
             return ResponseEntity.ok(newsFind.get());
@@ -75,19 +76,17 @@ public class NewsController {
     }
 
     @PutMapping("/news")//Update News existing in database
-    public ResponseEntity<Object> updateCategory(@Valid @RequestBody News news) throws URISyntaxException {
-        Optional<News> existingNews = newsService.findById(news.getNewsId());
-        if (existingNews.isPresent() && !(existingNews.get().getNewsId() == news.getNewsId())){
-            throw new IsAlreadyException(news.getTitle());
+    public ResponseEntity<News> updateCategory(@ModelAttribute NewsUploadDTO newsUploadDTO) throws URISyntaxException {
+        if (newsUploadDTO.getNewsId().equals("")) {
+            throw new BadRequestAlertException(newsUploadDTO.getNewsId());
         }
-        Optional<Object> newNews =newsService.updateNews(news);
+        Optional<News> newsUpdate = newsService.updateNews(newsUploadDTO);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+news.getNewsId()));
-        if (newNews.isPresent()){
-            newsRepository.save(news);
-            return ResponseEntity.ok(newNews.get());
-        }else {
+        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsUploadDTO.getNewsId()));
+        if (newsUpdate.isEmpty()){
             return ResponseEntity.noContent().headers(headers).build();
+        }else {
+            return ResponseEntity.ok(newsUpdate.get());
         }
     }
 

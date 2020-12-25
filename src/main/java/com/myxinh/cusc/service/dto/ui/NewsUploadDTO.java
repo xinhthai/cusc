@@ -17,10 +17,9 @@ public class NewsUploadDTO {
     private String title;
     private String shortContent;
     private String detail;
-    private Date createdDate;
+    private String createdDate;
     private String menuId;
     private String categoryId;
-    private String userId;
     private String mainNews;
     private MultipartFile imagePath;
 }

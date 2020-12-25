@@ -4,11 +4,8 @@ import com.myxinh.cusc.domain.Category;
 import com.myxinh.cusc.domain.News;
 import com.myxinh.cusc.repository.MenuRepository;
 import com.myxinh.cusc.repository.NewsRepository;
-import com.myxinh.cusc.service.dto.ui.NewsDTO;
 import com.myxinh.cusc.service.dto.ui.NewsUploadDTO;
 import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
-import com.myxinh.cusc.service.mapper.MapperUtils;
-import com.myxinh.cusc.service.utils.SystemUtils;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewsService extends MapperUtils<News, NewsDTO>{
+public class NewsService{
     @Autowired
     private NewsRepository newsRepository;
 
@@ -42,9 +34,9 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
             e.printStackTrace();
         }
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        
         News news = new News();
         news.setNewsId(0);
+        news.setNewsId(Integer.parseInt(newsUploadDTO.getNewsId()));
         news.setTitle(newsUploadDTO.getTitle());
         news.setShortContent(newsUploadDTO.getShortContent());
         news.setDetail(newsUploadDTO.getDetail());
@@ -65,7 +57,7 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
         return newsRepository.findAllNewsView();
     }
 
-    public Optional<News> findById(int id){
+    public Optional<News> findById(int id) throws IOException {
         return newsRepository.findById(id);
     }
 
@@ -73,12 +65,37 @@ public class NewsService extends MapperUtils<News, NewsDTO>{
         return newsRepository.findNewsByCategoryIdOrMenuId(categoryId,menuId);
     }
 
-    public Optional<Object> updateNews(News news){
-        return Optional.of(newsRepository
-                .findById(news.getNewsId()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(oldNews -> convert(news,NewsDTO.class));
+    public Optional<News> updateNews(NewsUploadDTO newsUploadDTO){
+        Optional<News> newsFind = newsRepository.findById(Integer.parseInt(newsUploadDTO.getNewsId()));
+        if (newsFind.isPresent()){
+            News news = newsFind.get();
+            String imageName = newsUploadDTO.getImagePath().getOriginalFilename();
+            if (imageName != null && !imageName.equals(news.getImagePath())) {
+                try {
+                    File file = new File(SystemConstants.IMAGE_DIRECTORY + newsUploadDTO.getImagePath().getOriginalFilename());//;lưu ảnh vào folder dự án
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(newsUploadDTO.getImagePath().getBytes());
+                    news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            news.setNewsId(Integer.parseInt(newsUploadDTO.getNewsId()));
+            news.setTitle(newsUploadDTO.getTitle());
+            news.setShortContent(newsUploadDTO.getShortContent());
+            news.setDetail(newsUploadDTO.getDetail());
+            news.setMainNews(Boolean.parseBoolean(newsUploadDTO.getMainNews()));
+            news.setCategory(new Category(Integer.parseInt(newsUploadDTO.getCategoryId()),""));
+            news.setMenu(
+                    Optional.of(menuRepository.findById(Integer.parseInt(newsUploadDTO.getMenuId())))
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .orElse(null)
+            );
+            return Optional.of(newsRepository.save(news));
+        }
+        return Optional.empty();
     }
 
     public void deleteNews(int newsId){
