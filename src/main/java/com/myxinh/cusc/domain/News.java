@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,7 +26,6 @@ public class News implements Serializable {
 
     @Column(name = "short_content",length = 500,nullable = false)
     private String shortContent;
-
 
     @Column(name = "detail", nullable = false)
     private String detail;
