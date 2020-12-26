@@ -37,7 +37,6 @@ public class NewsController {
     public ResponseEntity<List<NewsViewDTO>> getAllNewsByTitle(){
         return ResponseEntity.ok(newsService.getAllNewsView());
     }
-
     @GetMapping("/news/{newsId}")// Get News Detail
     public ResponseEntity<News> getNewsById(@PathVariable("newsId") int newsId) throws IOException {
         Optional<News> newsFind = newsService.findById(newsId);
