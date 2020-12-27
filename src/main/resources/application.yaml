@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/cusc
     username: root
-    password: 2281997
+    password: 123456
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5Dialect
@@ -19,6 +19,5 @@ spring:
         format_sql: true
 #Token key secret
 secretKey: MjlhMTU0MzFiNmUxYzY0MDlkMGYwM2ZhMTE5NGYyNWI1YTIxOTgxMjE5MGYyYzU1NGU2OGM4ZjgxNjRlOWIwN2IxODYxYWY2OGFjNmQ0ZDk2YjY2MDdmYmYzMWZkMGUzNjQzOWU1M2YxODQ2NmM0MTIzNGIwZDE3NWVlZWIzYTk=
-uploadDir: C:\Users\asus s510u\Desktop\news
 
 
