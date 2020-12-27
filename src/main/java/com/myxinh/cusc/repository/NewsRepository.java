@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface NewsRepository extends JpaRepository<News, Integer> {
@@ -27,6 +28,9 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
     @Transactional
     @Query("UPDATE News n SET n.status =:status  WHERE n.newsId =:newsId")
     void updateNewStatus(@Param("status") boolean status,@Param("newsId")int newsId);
+
+    @Query("SELECT n FROM News n WHERE n.mainNews = true AND n.category.categoryId =:categoryId")
+    Optional<News> isMainNews(@Param("categoryId") int categoryId);
 }
 
 

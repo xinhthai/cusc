@@ -111,4 +111,8 @@ public class NewsService{
         );
     }
 
+    public Optional<News> isMainNews(int categoryId){
+        return newsRepository.isMainNews(categoryId);
+    }
+
 }

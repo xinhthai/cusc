@@ -8,11 +8,10 @@ import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import com.myxinh.cusc.web.errors.BadRequestAlertException;
 import com.myxinh.cusc.web.errors.ErrorConstants;
-import com.myxinh.cusc.web.errors.IsAlreadyException;
+import com.myxinh.cusc.web.errors.ExistMainNewsException;
 import com.myxinh.cusc.web.errors.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +66,9 @@ public class NewsController {
         if (!newsUploadDTO.getNewsId().equals("")) {
             throw new BadRequestAlertException(newsUploadDTO.getNewsId());
         }
+        if (newsService.isMainNews(Integer.parseInt(newsUploadDTO.getCategoryId())).isPresent()){
+            throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
+        }
         else {
             News newNews = newsService.addNews(newsUploadDTO);
             return ResponseEntity.created(
@@ -79,6 +81,9 @@ public class NewsController {
     public ResponseEntity<News> updateCategory(@ModelAttribute NewsUploadDTO newsUploadDTO) throws URISyntaxException {
         if (newsUploadDTO.getNewsId().equals("")) {
             throw new BadRequestAlertException(newsUploadDTO.getNewsId());
+        }
+        if (newsService.isMainNews(Integer.parseInt(newsUploadDTO.getCategoryId())).isPresent()){
+            throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
         }
         Optional<News> newsUpdate = newsService.updateNews(newsUploadDTO);
         HttpHeaders headers = new HttpHeaders();
@@ -99,16 +104,19 @@ public class NewsController {
         return ResponseEntity.noContent().headers(headers).build();
     }
 
-    @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
-    @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<Void> updateNewsStatus(
-            @PathVariable("newsId")  int newsId,
-            @RequestParam("status") String status
-    ) throws URISyntaxException {
-        newsService.updateNewsStatus(newsId,Boolean.parseBoolean(status));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsId+"status?"+status));
-        return ResponseEntity.noContent().headers(headers).build();
-    }
+//    @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
+//    @CrossOrigin(origins = "http://localhost:4200")
+//    public ResponseEntity<Void> updateNewsStatus(
+//            @PathVariable("newsId")  int newsId,
+//            @RequestParam("status") String status
+//    ) throws URISyntaxException {
+//        if (newsService.isMainNews()){
+//            throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
+//        }
+//        newsService.updateNewsStatus(newsId,Boolean.parseBoolean(status));
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsId+"status?"+status));
+//        return ResponseEntity.noContent().headers(headers).build();
+//    }
 
 }
