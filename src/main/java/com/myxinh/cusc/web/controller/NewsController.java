@@ -103,19 +103,15 @@ public class NewsController {
         return ResponseEntity.noContent().headers(headers).build();
     }
 
-//    @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
-//    @CrossOrigin(origins = "http://localhost:4200")
-//    public ResponseEntity<Void> updateNewsStatus(
-//            @PathVariable("newsId")  int newsId,
-//            @RequestParam("status") String status
-//    ) throws URISyntaxException {
-//        if (newsService.isMainNews()){
-//            throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
-//        }
-//        newsService.updateNewsStatus(newsId,Boolean.parseBoolean(status));
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsId+"status?"+status));
-//        return ResponseEntity.noContent().headers(headers).build();
-//    }
+    @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
+    public ResponseEntity<Void> updateNewsStatus(
+            @PathVariable("newsId")  int newsId,
+            @RequestParam("status") String status
+    ) throws URISyntaxException {
+        newsService.updateNewsStatus(newsId,Boolean.parseBoolean(status));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(SystemConstants.BASE_URL+"/news/"+newsId+"status?"+status));
+        return ResponseEntity.noContent().headers(headers).build();
+    }
 
 }
