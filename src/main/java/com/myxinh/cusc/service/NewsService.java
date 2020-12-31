@@ -36,7 +36,6 @@ public class NewsService{
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         News news = new News();
         news.setNewsId(0);
-        news.setNewsId(Integer.parseInt(newsUploadDTO.getNewsId()));
         news.setTitle(newsUploadDTO.getTitle());
         news.setShortContent(newsUploadDTO.getShortContent());
         news.setDetail(newsUploadDTO.getDetail());

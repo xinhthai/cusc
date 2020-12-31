@@ -28,6 +28,13 @@ public class TokenProvider {//create jwt token
 
     private static final String AUTHORITIES_KEY = "auth";
 
+    private long tokenValidityInMilliseconds;
+
+    private long tokenValidityInMillisecondsForRememberMe;
+
+    public TokenProvider() {
+    }
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -50,10 +57,17 @@ public class TokenProvider {//create jwt token
     }
 
     // cấp token
-    public String createToken(Authentication authentication) {
+    public String createToken(Authentication authentication,boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+//        long now = (new Date()).getTime();
+//        Date validity;
+//        if (rememberMe) {
+//            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+//        } else {
+//            validity = new Date(now + this.tokenValidityInMilliseconds);
+//        }
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY,authorities)

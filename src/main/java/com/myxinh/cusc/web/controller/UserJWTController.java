@@ -13,13 +13,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class UserJWTController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -27,14 +25,15 @@ public class UserJWTController {
     @Autowired
     private TokenProvider tokenProvider;
 
-
+//    @CrossOrigin(allowedHeaders = {"Authorization"})
+//    @CrossOrigin(origins = "*",allowCredentials = ,allowedHeaders = , exposedHeaders = , methods = , value = )
     @PostMapping("/auth")
     public ResponseEntity<JWTToken> authorize(@RequestBody LoginRequest auth){
         try{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(auth.getUsername(),auth.getPassword())
             );
-            final String jwt = tokenProvider.createToken(authentication);
+            final String jwt = tokenProvider.createToken(authentication, auth.getRememberMe());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER,"Bearer "+jwt);
             return new ResponseEntity<>(new JWTToken(jwt),httpHeaders,HttpStatus.OK);

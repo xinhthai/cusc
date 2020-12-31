@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
 public class NewsController {
 
     @Autowired
@@ -65,7 +64,8 @@ public class NewsController {
         if (!newsUploadDTO.getNewsId().equals("")) {
             throw new BadRequestAlertException(newsUploadDTO.getNewsId());
         }
-        if (newsService.isMainNews(Integer.parseInt(newsUploadDTO.getCategoryId())).isPresent()){
+        if (newsService.isMainNews(Integer.parseInt(newsUploadDTO.getCategoryId())).isPresent() &&
+            newsUploadDTO.getMainNews().equals("true") ){
             throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
         }
         else {
