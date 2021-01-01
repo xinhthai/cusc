@@ -3,7 +3,9 @@ package com.myxinh.cusc.web.controller;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myxinh.cusc.security.jwt.JWTFilter;
 import com.myxinh.cusc.security.jwt.TokenProvider;
+import com.myxinh.cusc.service.UserService;
 import com.myxinh.cusc.service.dto.LoginRequest;
+import com.myxinh.cusc.service.dto.UserDTO;
 import com.myxinh.cusc.web.errors.ErrorConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,11 +15,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-//@CrossOrigin(origins = "http://localhost:4200")
 public class UserJWTController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -25,39 +33,54 @@ public class UserJWTController {
     @Autowired
     private TokenProvider tokenProvider;
 
-//    @CrossOrigin(allowedHeaders = {"Authorization"})
-//    @CrossOrigin(origins = "*",allowCredentials = ,allowedHeaders = , exposedHeaders = , methods = , value = )
+    @Autowired
+    private UserService userService;
+
+
     @PostMapping("/auth")
-    public ResponseEntity<JWTToken> authorize(@RequestBody LoginRequest auth){
+    public ResponseEntity<UserToken> authorize(@RequestBody LoginRequest auth){
         try{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(auth.getUsername(),auth.getPassword())
             );
-            final String jwt = tokenProvider.createToken(authentication, auth.getRememberMe());
+            boolean rememberMe = (auth.isRememberMe() == null) ? false : auth.isRememberMe();
+            final String jwt = tokenProvider.createToken(authentication, rememberMe);
+            List<String> authorities = authentication.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER,"Bearer "+jwt);
-            return new ResponseEntity<>(new JWTToken(jwt),httpHeaders,HttpStatus.OK);
+            return new ResponseEntity<>(new UserToken(authentication.getName(),authorities),httpHeaders,HttpStatus.OK);
         }catch (Exception e){
             throw new BadCredentialsException(ErrorConstants.BAD_CREDENTIALS);
         }
     }
 
-    static class JWTToken {
+    static class UserToken {
 
-        private String idToken;
+        private String username;
+        private List<String> authorities;
 
-        JWTToken(String idToken) {
-            this.idToken = idToken;
+        public UserToken(String username, List<String> authorities) {
+            this.username = username;
+            this.authorities = authorities;
         }
 
-        @JsonProperty("id_token")
-        String getIdToken() {
-            return idToken;
+        public String getUsername() {
+            return username;
         }
 
-        void setIdToken(String idToken) {
-            this.idToken = idToken;
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public List<String> getAuthorities() {
+            return authorities;
+        }
+
+        public void setAuthorities(List<String> authorities) {
+            this.authorities = authorities;
         }
     }
-
 }
