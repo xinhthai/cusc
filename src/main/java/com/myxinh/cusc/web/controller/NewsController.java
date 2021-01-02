@@ -13,6 +13,7 @@ import com.myxinh.cusc.web.errors.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class NewsController {
     public ResponseEntity<List<NewsViewDTO>> getAllNewsByTitle(){
         return ResponseEntity.ok(newsService.getAllNewsView());
     }
+
     @GetMapping("/news/{newsId}")// Get News Detail
     public ResponseEntity<News> getNewsById(@PathVariable("newsId") int newsId) throws IOException {
         Optional<News> newsFind = newsService.findById(newsId);
@@ -45,6 +47,7 @@ public class NewsController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('WRITER','ADMIN')")
     @GetMapping("/news/type") ResponseEntity<List<NewsViewDTO>> findAllByCondition(
             @RequestParam(value = "categoryId",defaultValue = "") String categoryId,
             @RequestParam(value = "menuId",defaultValue = "0") String menuId){
@@ -60,6 +63,7 @@ public class NewsController {
     }
 
     @PostMapping("/news")//Add new News
+    @PreAuthorize("hasAnyRole('WRITER','ADMIN')")
     public ResponseEntity<News> saveCategory(@ModelAttribute NewsUploadDTO newsUploadDTO) throws URISyntaxException {
         if (!newsUploadDTO.getNewsId().equals("")) {
             throw new BadRequestAlertException(newsUploadDTO.getNewsId());
@@ -77,6 +81,7 @@ public class NewsController {
     }
 
     @PutMapping("/news")//Update News existing in database
+    @PreAuthorize("hasAnyRole('WRITER','ADMIN')")
     public ResponseEntity<News> updateCategory(@ModelAttribute NewsUploadDTO newsUploadDTO) throws URISyntaxException {
         if (newsUploadDTO.getNewsId().equals("")) {
             throw new BadRequestAlertException(newsUploadDTO.getNewsId());
@@ -96,6 +101,7 @@ public class NewsController {
 
 
     @DeleteMapping("/news/{newsId}")//Delete Category existing in database
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable ("newsId") int newsId) throws URISyntaxException {
         newsService.deleteNews(newsId);
         HttpHeaders headers = new HttpHeaders();
@@ -104,6 +110,7 @@ public class NewsController {
     }
 
     @PutMapping("/news/{newsId}") //Update news status:localhost:3000/api/news/13/?status=true
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateNewsStatus(
             @PathVariable("newsId")  int newsId,
             @RequestParam("status") String status
