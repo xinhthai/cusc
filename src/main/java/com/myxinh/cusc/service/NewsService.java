@@ -43,7 +43,7 @@ public class NewsService{
         news.setTitle(newsUploadDTO.getTitle());
         news.setShortContent(newsUploadDTO.getShortContent());
         news.setDetail(newsUploadDTO.getDetail());
-        news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
+        news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename().trim());
         news.setCreatedDate(timestamp);
         news.setMainNews(Boolean.parseBoolean(newsUploadDTO.getMainNews()));
         userRepository.findUserEntityByUsername(newsUploadDTO.getUsername()).ifPresent(
@@ -89,7 +89,7 @@ public class NewsService{
                     File file = new File(SystemConstants.IMAGE_DIRECTORY + newsUploadDTO.getImagePath().getOriginalFilename());//;lưu ảnh vào folder dự án
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
                     fileOutputStream.write(newsUploadDTO.getImagePath().getBytes());
-                    news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
+                    news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename().trim());
                     fileOutputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();

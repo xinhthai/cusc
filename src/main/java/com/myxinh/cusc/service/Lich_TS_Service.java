@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Lich_TSService {
+public class Lich_TS_Service {
 
     @Autowired
-    Lich_TSService lich_tsService;
+    Lich_TS_Service lich_tsService;
 
 }

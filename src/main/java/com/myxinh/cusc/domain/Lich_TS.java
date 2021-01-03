@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "lich_ts")
@@ -44,8 +43,5 @@ public class Lich_TS implements Serializable {
 
     @Column(name = "lits_ttkhac")
     private String lits_ttkhac;
-
-    @Column(name = "lits_ngayghidanh")
-    private String lits_ngayghidanh;
 
 }
