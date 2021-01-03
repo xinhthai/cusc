@@ -49,13 +49,17 @@ public class NewsService{
         userRepository.findUserEntityByUsername(newsUploadDTO.getUsername()).ifPresent(
                 news::setUser
         );
-        news.setCategory(new Category(Integer.parseInt(newsUploadDTO.getCategoryId()),""));
-        news.setMenu(
-                Optional.of(menuRepository.findById(Integer.parseInt(newsUploadDTO.getMenuId())))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .orElse(null)
-        );
+        if (Integer.parseInt(newsUploadDTO.getMenuId()) != 0){
+            news.setCategory(new Category(Integer.parseInt(newsUploadDTO.getCategoryId()),""));
+        }
+        if (Integer.parseInt(newsUploadDTO.getCategoryId()) != 0){
+            news.setMenu(
+                    Optional.of(menuRepository.findById(Integer.parseInt(newsUploadDTO.getMenuId())))
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .orElse(null)
+            );
+        }
         return newsRepository.save(news);
     }
 
