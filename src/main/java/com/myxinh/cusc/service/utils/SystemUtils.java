@@ -25,7 +25,7 @@ public class SystemUtils {
         }
     }
 
-    public static String convertToDate(Timestamp timestamp){
-        return null;
+    public static String getDate(String data){
+        return data.substring(0,10);
     }
 }

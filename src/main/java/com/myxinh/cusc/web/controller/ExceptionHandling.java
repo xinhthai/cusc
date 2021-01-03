@@ -59,4 +59,11 @@ public class ExceptionHandling extends ResponseEntityExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),ex.getMessage(),path);
         return handleExceptionInternal(ex,error,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR,request);
     }
+
+    @ExceptionHandler(value = {DateLogicException.class})
+    protected ResponseEntity<Object> handleDateException(RuntimeException ex,WebRequest request){
+        String path = ((ServletWebRequest)request).getRequest().getRequestURI();
+        ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),ex.getMessage(),path);
+        return handleExceptionInternal(ex,error,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR,request);
+    }
 }
