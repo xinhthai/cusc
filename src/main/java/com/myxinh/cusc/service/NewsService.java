@@ -4,6 +4,7 @@ import com.myxinh.cusc.domain.Category;
 import com.myxinh.cusc.domain.News;
 import com.myxinh.cusc.repository.MenuRepository;
 import com.myxinh.cusc.repository.NewsRepository;
+import com.myxinh.cusc.repository.UserRepository;
 import com.myxinh.cusc.service.dto.ui.NewsUploadDTO;
 import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
 import com.myxinh.cusc.web.constants.SystemConstants;
@@ -24,6 +25,9 @@ public class NewsService{
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public News addNews(NewsUploadDTO newsUploadDTO){
         try {
             File file = new File(SystemConstants.IMAGE_DIRECTORY + newsUploadDTO.getImagePath().getOriginalFilename());//;lưu ảnh vào folder dự án
@@ -42,6 +46,9 @@ public class NewsService{
         news.setImagePath(newsUploadDTO.getImagePath().getOriginalFilename());
         news.setCreatedDate(timestamp);
         news.setMainNews(Boolean.parseBoolean(newsUploadDTO.getMainNews()));
+        userRepository.findUserEntityByUsername(newsUploadDTO.getUsername()).ifPresent(
+                news::setUser
+        );
         news.setCategory(new Category(Integer.parseInt(newsUploadDTO.getCategoryId()),""));
         news.setMenu(
                 Optional.of(menuRepository.findById(Integer.parseInt(newsUploadDTO.getMenuId())))

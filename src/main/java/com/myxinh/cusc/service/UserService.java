@@ -36,11 +36,4 @@ public class UserService{
                                 .collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
-
-//    public UserDTO getUserByAuthRequest(String username,String password){
-//        UserEntity userEntity = userRepository.findUserByUsernameAndPassword(username,password);
-//        List<String>authorities = userEntity.getRoles().stream().map(Role::getName).collect(Collectors.toList());
-//        return new UserDTO(userEntity.getUsername(),userEntity.getFullName(),userEntity.isActive(),authorities);
-//
-//    }
 }

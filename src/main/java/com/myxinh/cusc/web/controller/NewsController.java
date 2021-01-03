@@ -6,10 +6,7 @@ import com.myxinh.cusc.service.NewsService;
 import com.myxinh.cusc.service.dto.ui.NewsUploadDTO;
 import com.myxinh.cusc.service.dto.ui.NewsViewDTO;
 import com.myxinh.cusc.web.constants.SystemConstants;
-import com.myxinh.cusc.web.errors.BadRequestAlertException;
-import com.myxinh.cusc.web.errors.ErrorConstants;
-import com.myxinh.cusc.web.errors.ExistMainNewsException;
-import com.myxinh.cusc.web.errors.NotFoundException;
+import com.myxinh.cusc.web.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +68,10 @@ public class NewsController {
         if (newsService.isMainNews(Integer.parseInt(newsUploadDTO.getCategoryId())).isPresent() &&
             newsUploadDTO.getMainNews().equals("true") ){
             throw new ExistMainNewsException(ErrorConstants.EXIST_MAIN_NEWS);
+        }
+        if (Integer.parseInt(newsUploadDTO.getCategoryId()) == 0 &&
+            Integer.parseInt(newsUploadDTO.getMenuId()) == 0){
+            throw new NullException("Category and Menu");
         }
         else {
             News newNews = newsService.addNews(newsUploadDTO);

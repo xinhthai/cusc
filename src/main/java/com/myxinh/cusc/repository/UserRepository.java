@@ -19,8 +19,8 @@ public interface UserRepository extends JpaRepository<UserEntity,String>{
     @EntityGraph(attributePaths = "roles")
     Optional<UserEntity> findOneWithAuthoritiesByUsername(String userName);
 
-//    @Query("SELECT u FROM UserEntity u WHERE u.username =:username AND u.password =:password")
-//    UserEntity findUserByUsernameAndPassword(@Param("username") String username,@Param("password")String password);
+    @Query("SELECT u FROM UserEntity u WHERE u.username =:username")
+    Optional<UserEntity> findUserEntityByUsername(@Param("username") String username);
 }
 
 

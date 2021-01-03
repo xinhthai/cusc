@@ -3,6 +3,8 @@ package com.myxinh.cusc.service.utils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.SerializationUtils;
 
+import java.sql.Timestamp;
+
 public class SystemUtils {
     public static String serializeData(String original){
         byte[] input = SerializationUtils.serialize((original));
@@ -21,5 +23,9 @@ public class SystemUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String convertToDate(Timestamp timestamp){
+        return null;
     }
 }

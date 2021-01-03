@@ -31,6 +31,7 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
 
     @Query("SELECT n FROM News n WHERE n.mainNews = true AND n.category.categoryId =:categoryId")
     Optional<News> isMainNews(@Param("categoryId") int categoryId);
+
 }
 
 

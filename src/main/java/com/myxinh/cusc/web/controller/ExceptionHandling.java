@@ -1,10 +1,7 @@
 package com.myxinh.cusc.web.controller;
 
 import com.myxinh.cusc.service.dto.ErrorResponse;
-import com.myxinh.cusc.web.errors.BadRequestAlertException;
-import com.myxinh.cusc.web.errors.IsAlreadyException;
-import com.myxinh.cusc.web.errors.ExistMainNewsException;
-import com.myxinh.cusc.web.errors.NotFoundException;
+import com.myxinh.cusc.web.errors.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +51,12 @@ public class ExceptionHandling extends ResponseEntityExceptionHandler {
         String path = ((ServletWebRequest)request).getRequest().getRequestURI();
         ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(),ex.getMessage(),path);
         return handleExceptionInternal(ex,error,new HttpHeaders(),HttpStatus.CONFLICT,request);
+    }
+
+    @ExceptionHandler(value = {NullException.class})
+    protected ResponseEntity<Object> handleNullPointerException(RuntimeException ex,WebRequest request){
+        String path = ((ServletWebRequest)request).getRequest().getRequestURI();
+        ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),ex.getMessage(),path);
+        return handleExceptionInternal(ex,error,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR,request);
     }
 }
