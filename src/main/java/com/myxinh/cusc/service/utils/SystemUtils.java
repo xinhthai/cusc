@@ -1,9 +1,14 @@
 package com.myxinh.cusc.service.utils;
 
+import com.myxinh.cusc.web.errors.DateLogicException;
+import com.myxinh.cusc.web.errors.ErrorConstants;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.SerializationUtils;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SystemUtils {
     public static String serializeData(String original){
@@ -27,5 +32,13 @@ public class SystemUtils {
 
     public static String getDate(String data){
         return data.substring(0,10);
+    }
+
+    public static boolean checkDateLogic(String startDate,String endDate) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date lits_ktdk = simpleDateFormat.parse(startDate);
+        Date lits_bddk = simpleDateFormat.parse(endDate);
+        return lits_ktdk.after(lits_bddk) || lits_bddk.before(lits_ktdk);
+
     }
 }

@@ -44,4 +44,9 @@ public class Lits implements Serializable {
     @Column(name = "lits_ttkhac")
     private String lits_ttkhac;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",updatable = false)
+    private UserEntity user;
+
+
 }

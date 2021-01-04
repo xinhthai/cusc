@@ -3,6 +3,8 @@ package com.myxinh.cusc.web.controller;
 import com.myxinh.cusc.domain.Lits;
 import com.myxinh.cusc.repository.LitsRepository;
 import com.myxinh.cusc.service.LitsService;
+import com.myxinh.cusc.service.dto.ui.LitsDTO;
+import com.myxinh.cusc.service.utils.SystemUtils;
 import com.myxinh.cusc.web.constants.SystemConstants;
 import com.myxinh.cusc.web.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,20 +47,17 @@ public class LitsController {
     }
 
     @PostMapping("/lits")//add new Lich_TS
-    public ResponseEntity<Lits> saveCategory(@RequestBody Lits lits) throws URISyntaxException, ParseException {
-        if (lits.getLits_id() != 0){
-            throw new BadRequestAlertException(String.valueOf(lits.getLits_id()));
-        }else if (litsRepository.findOneByName(lits.getLits_ten()).isPresent()){
-            throw new IsAlreadyException(lits.getLits_ten());
+    public ResponseEntity<Lits> saveCategory(@RequestBody LitsDTO litsDTO) throws URISyntaxException, ParseException {
+        if (litsDTO.getLits_id() != 0){
+            throw new BadRequestAlertException(String.valueOf(litsDTO.getLits_id()));
+        }else if (litsRepository.findOneByName(litsDTO.getLits_ten()).isPresent()){
+            throw new IsAlreadyException(litsDTO.getLits_ten());
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date lits_ktdk = simpleDateFormat.parse(lits.getLits_ktdk());
-        Date lits_bddk = simpleDateFormat.parse(lits.getLits_bddk());
-        if (lits_ktdk.before(lits_bddk) || lits_bddk.after(lits_ktdk)){
-            throw new DateLogicException(ErrorConstants.DATE_LOGIC+lits.getLits_bddk()+" and"+lits_ktdk);
+        if (!SystemUtils.checkDateLogic(litsDTO.getLits_bddk(),litsDTO.getLits_ktdk())){
+            throw new DateLogicException("Start Date and End Date");
         }
         else {
-            Lits litsNew = litsService.addLits(lits);
+            Lits litsNew = litsService.addLits(litsDTO);
             return ResponseEntity.created(
                     new URI(SystemConstants.BASE_URL+"/lits/"+litsNew.getLits_id()))
                     .body(litsNew);
@@ -66,26 +65,18 @@ public class LitsController {
     }
 
     @PutMapping("/lits")// update Lits existing in database
-    public ResponseEntity<Lits> updateCategory(@Valid @RequestBody Lits lits) throws URISyntaxException, ParseException {
-        Optional<Lits> existingLich_TS = litsRepository.findOneByName(lits.getLits_ten());
-        if (existingLich_TS.isPresent() && !(existingLich_TS.get().getLits_id() == lits.getLits_id())){
-            throw new IsAlreadyException(lits.getLits_ten());
+    public ResponseEntity<Lits> updateCategory(@Valid @RequestBody LitsDTO litsDTO) throws URISyntaxException, ParseException {
+        Optional<Lits> existingLits = litsRepository.findOneByName(litsDTO.getLits_ten());
+        if (existingLits.isPresent() && !(existingLits.get().getLits_id() == litsDTO.getLits_id())){
+            throw new IsAlreadyException(litsDTO.getLits_ten());
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date lits_ktdk = simpleDateFormat.parse(lits.getLits_ktdk());
-        Date lits_bddk = simpleDateFormat.parse(lits.getLits_bddk());
-        if (lits_ktdk.before(lits_bddk) || lits_bddk.after(lits_ktdk)){
-            throw new DateLogicException(ErrorConstants.DATE_LOGIC+lits.getLits_bddk()+" and"+lits_ktdk);
-        }
-        Optional<Lits> newLits =litsService.updateLits(lits);
+       if (!SystemUtils.checkDateLogic(litsDTO.getLits_bddk(),litsDTO.getLits_ktdk())){
+           throw new DateLogicException("Start Date and End Date");
+       }
+        Optional<Lits> newLits =litsService.updateLits(litsDTO);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(SystemConstants.BASE_URL+"/categories/"+lits.getLits_id()));
-        if (newLits.isPresent()){
-            litsService.addLits(lits);
-            return ResponseEntity.ok(newLits.get());
-        }else {
-            return ResponseEntity.noContent().headers(headers).build();
-        }
+        headers.setLocation(new URI(SystemConstants.BASE_URL+"/categories/"+litsDTO.getLits_id()));
+        return newLits.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().headers(headers).build());
     }
 //
     @DeleteMapping("/lits/{litsId}")//Delete Lits existing in database

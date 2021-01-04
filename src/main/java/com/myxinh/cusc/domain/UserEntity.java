@@ -51,5 +51,7 @@ public class UserEntity implements Serializable{
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     private Set<News> news;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Set<Lits> listLits;
 }
-//API CRUD Spring boot
