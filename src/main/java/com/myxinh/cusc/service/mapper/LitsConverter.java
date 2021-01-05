@@ -19,6 +19,7 @@ public class LitsConverter {
         newLits.setLits_ktdk(SystemUtils.getDate(litsDTO.getLits_ktdk()));
         newLits.setLits_tghoc(litsDTO.getLits_tghoc());
         newLits.setLits_ttkhac(litsDTO.getLits_ttkhac());
+        newLits.setLink(litsDTO.getLink());
         return newLits;
     }
     public static Lits covertToViews(LitsDTO litsDTO){
@@ -32,6 +33,7 @@ public class LitsConverter {
         newLits.setLits_ktdk(litsDTO.getLits_ktdk());
         newLits.setLits_tghoc(litsDTO.getLits_tghoc());
         newLits.setLits_ttkhac(litsDTO.getLits_ttkhac());
+        newLits.setLink(litsDTO.getLink());
         return newLits;
     }
 }

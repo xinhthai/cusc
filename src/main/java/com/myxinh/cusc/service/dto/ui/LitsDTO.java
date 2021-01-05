@@ -24,5 +24,6 @@ public class LitsDTO {
     private String lits_ktdk;
     private String lits_tghoc;
     private String lits_ttkhac;
+    private String link;
     private String username;
 }

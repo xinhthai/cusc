@@ -21,7 +21,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     @Autowired
@@ -45,7 +44,6 @@ public class CategoryController {
         }
     }
     @PostMapping("/categories")//add new Category
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Category> saveCategory(@RequestBody Category category) throws URISyntaxException {
         if (category.getCategoryId() != 0){
             throw new BadRequestAlertException(String.valueOf(category.getCategoryId()));

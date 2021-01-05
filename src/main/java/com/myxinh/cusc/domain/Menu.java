@@ -15,7 +15,6 @@ import java.util.Set;
 @Table(name = "menu")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Menu implements Serializable {
@@ -30,9 +29,13 @@ public class Menu implements Serializable {
     @Column(name = "parent_id")
     private int parentId;
 
-    @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "menu",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<News> news;
 
-
+    public Menu(int menuId, String name, int parentId) {
+        this.menuId = menuId;
+        this.name = name;
+        this.parentId = parentId;
+    }
 }
