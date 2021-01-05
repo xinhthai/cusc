@@ -36,9 +36,9 @@ public class SystemUtils {
 
     public static boolean checkDateLogic(String startDate,String endDate) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date lits_ktdk = simpleDateFormat.parse(startDate);
-        Date lits_bddk = simpleDateFormat.parse(endDate);
-        return lits_ktdk.after(lits_bddk) || lits_bddk.before(lits_ktdk);
+        Date lits_bddk = simpleDateFormat.parse(startDate);
+        Date lits_ktdk = simpleDateFormat.parse(endDate);
+        return lits_bddk.before(lits_ktdk) && lits_ktdk.after(lits_bddk);
 
     }
 }

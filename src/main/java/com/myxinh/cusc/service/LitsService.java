@@ -1,5 +1,6 @@
 package com.myxinh.cusc.service;
 
+import com.myxinh.cusc.domain.Category;
 import com.myxinh.cusc.domain.Lits;
 import com.myxinh.cusc.repository.LitsRepository;
 import com.myxinh.cusc.repository.UserRepository;
@@ -8,6 +9,7 @@ import com.myxinh.cusc.service.mapper.LitsConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,14 +28,10 @@ public class LitsService {
     }
 
     public Optional<Lits> updateLits(LitsDTO litsDTO){
-        Optional<Lits> litsFind = litsRepository.findById(litsDTO.getLits_id());
-        Lits newLits = new Lits();
-        if (litsFind.isPresent()){
-            newLits = LitsConverter.covertToViews(litsDTO);
-            newLits.setUser(litsFind.get().getUser());
-            litsRepository.save(newLits);
-        }
-        return Optional.of(newLits);
+        return Optional.of(litsRepository
+                .findById(litsDTO.getLits_id()))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     public void deleteLits(int litsId){

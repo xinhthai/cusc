@@ -3,6 +3,7 @@ package com.myxinh.cusc.service.dto.ui;
 import com.myxinh.cusc.domain.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class LitsDTO {
 
     private int lits_id;

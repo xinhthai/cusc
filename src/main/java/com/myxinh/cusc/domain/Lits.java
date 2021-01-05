@@ -1,5 +1,6 @@
 package com.myxinh.cusc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,8 +48,9 @@ public class Lits implements Serializable {
     @Column(name = "link")
     private String link;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",updatable = false)
+    @JsonIgnore
     private UserEntity user;
 
 }
