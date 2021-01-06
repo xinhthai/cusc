@@ -48,7 +48,7 @@ public class Lits implements Serializable {
     @Column(name = "link")
     private String link;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",updatable = false)
     @JsonIgnore
     private UserEntity user;

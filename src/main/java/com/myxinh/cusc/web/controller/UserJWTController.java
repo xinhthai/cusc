@@ -1,6 +1,8 @@
 package com.myxinh.cusc.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myxinh.cusc.domain.Role;
+import com.myxinh.cusc.domain.UserEntity;
 import com.myxinh.cusc.security.jwt.JWTFilter;
 import com.myxinh.cusc.security.jwt.TokenProvider;
 import com.myxinh.cusc.service.UserService;
@@ -18,10 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,49 +37,23 @@ public class UserJWTController {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<UserToken> authorize(@RequestBody LoginRequest auth){
+    public ResponseEntity<Object> authorize(@RequestBody LoginRequest auth){
         try{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(auth.getUsername(),auth.getPassword())
             );
             boolean rememberMe = (auth.isRememberMe() == null) ? false : auth.isRememberMe();
             final String jwt = tokenProvider.createToken(authentication, rememberMe);
-            List<String> authorities = authentication.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER,"Bearer "+jwt);
-            return new ResponseEntity<>(new UserToken(authentication.getName(),authorities),httpHeaders,HttpStatus.OK);
+            return new ResponseEntity<>(userService.getUserWithAuthorities()
+                    .map(userEntity -> new UserDTO(userEntity.getUsername()
+                            ,userEntity.getFullName()
+                            ,userEntity.isActive()
+                            ,userEntity.getRoles().stream().map(Role::getName).collect(Collectors.toList())
+                    )),httpHeaders,HttpStatus.OK);
         }catch (Exception e){
             throw new BadCredentialsException(ErrorConstants.BAD_CREDENTIALS);
-        }
-    }
-
-    static class UserToken {
-
-        private String username;
-        private List<String> authorities;
-
-        public UserToken(String username, List<String> authorities) {
-            this.username = username;
-            this.authorities = authorities;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public List<String> getAuthorities() {
-            return authorities;
-        }
-
-        public void setAuthorities(List<String> authorities) {
-            this.authorities = authorities;
         }
     }
 }
