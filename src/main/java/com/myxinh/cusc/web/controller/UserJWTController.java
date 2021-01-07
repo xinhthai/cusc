@@ -37,7 +37,7 @@ public class UserJWTController {
 
 
     @PostMapping("/auth")
-    public ResponseEntity<Object> authorize(@RequestBody LoginRequest auth){
+    public ResponseEntity<UserDTO> authorize(@RequestBody LoginRequest auth){
         try{
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(auth.getUsername(),auth.getPassword())
@@ -46,12 +46,12 @@ public class UserJWTController {
             final String jwt = tokenProvider.createToken(authentication, rememberMe);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER,"Bearer "+jwt);
-            return new ResponseEntity<>(userService.getUserWithAuthorities()
-                    .map(userEntity -> new UserDTO(userEntity.getUsername()
-                            ,userEntity.getFullName()
-                            ,userEntity.isActive()
-                            ,userEntity.getRoles().stream().map(Role::getName).collect(Collectors.toList())
-                    )),httpHeaders,HttpStatus.OK);
+            Optional<UserDTO> userFind = userService.getUserByUsername(authentication.getName());
+            if (userFind.isPresent()){
+                return new ResponseEntity<>(userFind.get(),httpHeaders,HttpStatus.OK);
+            }else {
+                throw new BadCredentialsException(ErrorConstants.BAD_CREDENTIALS);
+            }
         }catch (Exception e){
             throw new BadCredentialsException(ErrorConstants.BAD_CREDENTIALS);
         }

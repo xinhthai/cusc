@@ -6,16 +6,11 @@ import com.myxinh.cusc.repository.UserRepository;
 import com.myxinh.cusc.security.SecurityUtils;
 import com.myxinh.cusc.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +32,18 @@ public class UserService{
                                 .map(Role::getName)
                                 .collect(Collectors.toList())))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<UserDTO> getUserByUsername(String username) {
+        return Optional.of(userRepository
+                .findUserEntityByUsername(username))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(userEntity -> new UserDTO(
+                        userEntity.getUsername(),
+                        userEntity.getFullName(),
+                        userEntity.isActive(),
+                        userEntity.getRoles().stream().map(Role::getName).collect(Collectors.toList())));
     }
 
     public Optional<UserEntity> getUserWithAuthorities() {

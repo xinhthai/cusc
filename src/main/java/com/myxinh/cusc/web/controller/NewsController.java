@@ -100,7 +100,6 @@ public class NewsController {
         }
     }
 
-
     @DeleteMapping("/news/{newsId}")//Delete Category existing in database
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable ("newsId") int newsId) throws URISyntaxException {
